@@ -1,0 +1,50 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Test Futbolista
+      id: test-futbolista
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test Futbolista
+        setup-command: ''
+        command: gradle test --tests *TestFutbolista
+        timeout: 10
+        max-score: 17
+    - name: Test Jugador
+      id: test-jugador
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test Jugador
+        setup-command: ''
+        command: gradle test --tests *TestJugador
+        timeout: 10
+        max-score: 17
+    - name: Test Portero
+      id: test-portero
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test Portero
+        setup-command: ''
+        command: gradle test --tests *TestPortero
+        timeout: 10
+        max-score: 16
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TEST-FUTBOLISTA_RESULTS: "${{steps.test-futbolista.outputs.result}}"
+        TEST-JUGADOR_RESULTS: "${{steps.test-jugador.outputs.result}}"
+        TEST-PORTERO_RESULTS: "${{steps.test-portero.outputs.result}}"
+      with:
+        runners: test-futbolista,test-jugador,test-portero
