@@ -1,40 +1,25 @@
 package futbol;
 
-@SuppressWarnings("rawtypes")
-public class Futbolista implements Comparable {
-    // Atributos privados
+import java.util.Objects;
+
+public abstract class Futbolista implements Comparable<Object> {
     private String nombre;
     private int edad;
-    private String posicion;
-
-    // Constructor
-    public Futbolista(String nombre, int edad, String posicion) {
-        this.nombre = nombre;
-        this.edad = edad;
-        this.posicion = posicion;
-    }
+    private final String posicion;
 
     // Constructor por defecto
     public Futbolista() {
         this("Maradona", 30, "delantero");
     }
 
-    // Método compareTo usando Object
-    @Override
-    public int compareTo(Object obj) {
-        if (obj instanceof Futbolista) {
-            Futbolista otroFutbolista = (Futbolista) obj;
-            int resultado = this.nombre.compareTo(otroFutbolista.nombre);
-            if (resultado == 0) {
-                resultado = Integer.compare(this.edad, otroFutbolista.edad);
-            }
-            return resultado;
-        } else {
-            throw new IllegalArgumentException("El objeto comparado no es un Futbolista");
-        }
+    // Constructor con parámetros
+    public Futbolista(String nombre, int edad, String posicion) {
+        this.nombre = nombre;
+        this.edad = edad;
+        this.posicion = posicion;
     }
 
-    // Otros métodos (getters, setters, etc.)
+    // Métodos get
     public String getNombre() {
         return nombre;
     }
@@ -47,23 +32,45 @@ public class Futbolista implements Comparable {
         return posicion;
     }
 
+    // Métodos set
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setEdad(int edad) {
+        this.edad = edad;
+    }
+
+    // Sobrescribir el método toString para la representación del Futbolista
     @Override
     public String toString() {
         return "El futbolista " + nombre + " tiene " + edad + ", y juega de " + posicion;
     }
 
+    // Implementación del método equals
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-        Futbolista that = (Futbolista) obj;
-        return edad == that.edad && nombre.equals(that.nombre) && posicion.equals(that.posicion);
+        Futbolista f = (Futbolista) obj;
+        return edad == f.edad && nombre.equals(f.nombre) && posicion.equals(f.posicion);
     }
 
-	public boolean jugarConLasManos() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(nombre, edad, posicion);
+    }
 
-    
+    // Implementación del método compareTo para Comparable<Object>
+    @Override
+    public int compareTo(Object obj) {
+        if (obj instanceof Futbolista) {
+            Futbolista otro = (Futbolista) obj;
+            return this.nombre.compareTo(otro.getNombre());
+        }
+        throw new ClassCastException("El objeto no es de tipo Futbolista");
+    }
+
+    // Método abstracto jugarConLasManos
+    public abstract boolean jugarConLasManos();
 }

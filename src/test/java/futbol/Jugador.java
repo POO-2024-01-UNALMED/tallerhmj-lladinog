@@ -5,36 +5,41 @@ public class Jugador extends Futbolista {
     public short golesMarcados;
     public byte dorsal;
 
-    // Constructor con todos los atributos
+    // Constructor que inicializa todos los atributos
     public Jugador(String nombre, int edad, String posicion, short golesMarcados, byte dorsal) {
-        super(nombre, edad, posicion); // Llama al constructor de la clase padre
+        super(nombre, edad, posicion);
         this.golesMarcados = golesMarcados;
         this.dorsal = dorsal;
     }
 
     // Constructor por defecto
     public Jugador() {
-        super("Maradona", 30, "delantero"); // Llama al constructor por defecto de la clase padre
+        super(); // Llama al constructor por defecto de Futbolista
         this.golesMarcados = 289;
         this.dorsal = 7;
     }
 
-    // Implementación del método compareTo para comparar por diferencia de edad
+    // Implementación del método compareTo para retornar la diferencia de edad
     @Override
-    public int compareTo(Futbolista otroFutbolista) {
-        return Math.abs(this.getEdad() - otroFutbolista.getEdad());
+    public int compareTo(Object obj) {
+        if (obj instanceof Futbolista) {
+            Futbolista otro = (Futbolista) obj;
+            return Math.abs(this.getEdad() - otro.getEdad());
+        }
+        throw new ClassCastException("El objeto no es de tipo Futbolista");
     }
 
-    // Sobrescribir el método toString para la impresión personalizada
+    // Sobrescribir el método toString para incluir golesMarcados y dorsal
     @Override
     public String toString() {
-        return "El futbolista " + getNombre() + " tiene " + getEdad() + ", y juega de " + getPosicion() + 
-               " con el dorsal " + dorsal + ". Ha marcado " + golesMarcados + " goles.";
+        return "El futbolista " + getNombre() + " tiene " + getEdad() +
+               ", y juega de " + getPosicion() + " con el dorsal " + dorsal +
+               ". Ha marcado " + golesMarcados;
     }
 
-    // Implementación del método abstracto jugarConLasManos
+    // Implementación del método jugarConLasManos (debe ser falso para Jugador)
     @Override
     public boolean jugarConLasManos() {
-        return false; // Por defecto, los jugadores no pueden jugar con las manos
+        return false;
     }
 }

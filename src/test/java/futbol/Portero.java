@@ -5,35 +5,41 @@ public class Portero extends Futbolista {
     public short golesRecibidos;
     public byte dorsal;
 
-    // Constructor con todos los atributos
+    // Constructor que inicializa todos los atributos
     public Portero(String nombre, int edad, short golesRecibidos, byte dorsal) {
-        super(nombre, edad, "Portero"); // La posición siempre será "Portero"
+        super(nombre, edad, "Portero"); // La posición siempre es "Portero"
         this.golesRecibidos = golesRecibidos;
         this.dorsal = dorsal;
     }
 
-    // Implementación del método compareTo para comparar por diferencia de goles recibidos
-    @Override
-    public int compareTo(Futbolista otroFutbolista) {
-        if (otroFutbolista instanceof Portero) {
-            Portero otroPortero = (Portero) otroFutbolista;
-            return Math.abs(this.golesRecibidos - otroPortero.golesRecibidos);
-        } else {
-            throw new IllegalArgumentException("Solo se pueden comparar porteros entre sí.");
-        }
+    // Constructor por defecto
+    public Portero() {
+        super("Maradona", 30, "Portero"); // Llama al constructor por defecto de Futbolista
+        this.golesRecibidos = 0;
+        this.dorsal = 1;
     }
 
-    // Sobrescribir el método toString para la impresión personalizada
+    // Implementación del método compareTo para retornar la diferencia de golesRecibidos
+    @Override
+    public int compareTo(Object obj) {
+        if (obj instanceof Portero) {
+            Portero otro = (Portero) obj;
+            return Math.abs(this.golesRecibidos - otro.golesRecibidos);
+        }
+        throw new ClassCastException("El objeto no es de tipo Portero");
+    }
+
+    // Sobrescribir el método toString para incluir golesRecibidos y dorsal
     @Override
     public String toString() {
-        return "El futbolista " + getNombre() + " tiene " + getEdad() + ", y juega de " + getPosicion() + 
-               " con el dorsal " + dorsal + ". Le han marcado " + golesRecibidos + " goles.";
+        return "El futbolista " + getNombre() + " tiene " + getEdad() +
+               ", y juega de " + getPosicion() + " con el dorsal " + dorsal +
+               ". Le han marcado " + golesRecibidos;
     }
 
-    // Implementación del método abstracto jugarConLasManos
+    // Implementación del método jugarConLasManos (debe ser verdadero para Portero)
     @Override
     public boolean jugarConLasManos() {
-        return true; // Los porteros pueden jugar con las manos
+        return true;
     }
 }
-
