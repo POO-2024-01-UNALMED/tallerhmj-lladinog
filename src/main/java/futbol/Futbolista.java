@@ -1,4 +1,4 @@
-package Futbol;
+package futbol;
 
 //Implementa la interface Comparable
 public abstract class Futbolista implements Comparable<Futbolista> {
